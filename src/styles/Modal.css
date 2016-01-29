@@ -1,0 +1,51 @@
+@import './variables.css';
+
+/*interaction blocker for popup menus, when visible or hidden*/
+.modal-blocker-visible {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  left: 0;
+  top: 0;
+  z-index: var(--zModal);
+}
+.modal-blocker-hidden {
+  position: fixed;
+  top: 0;
+  width: 0;
+  left: -100000px;
+  display: none;
+  visibility: hidden;
+  overflow: hidden;
+}
+.modal-window {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  background-color: white;
+  display: inline-block;
+}
+.modal-window-title {
+  font-size: 2rem;
+  line-height: 3rem;
+  height: 3rem;
+  color: var(--colors-greyMedLight);
+  text-indent: 1.5rem;
+}
+.modal-button-bar {
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid white;
+}
+.modal-button-bar * {
+  margin-left: 0.5rem;
+}
+
+.payload {
+  width: 50vw;
+  height: 50vh;
+}

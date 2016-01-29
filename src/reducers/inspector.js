@@ -7,8 +7,7 @@ export const initialState = {
 export default function inventory(state = initialState, action) {
   switch (action.type) {
   case ActionTypes.INSPECTOR_TOGGLE_VISIBILITY : {
-    const { forceState } = action;
-    const nextState = (forceState !== undefined) ? !!forceState : !state.isVisible;
+    const { nextState } = action;
     return Object.assign({}, state, {isVisible: nextState});
   }
   default : {

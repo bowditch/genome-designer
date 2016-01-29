@@ -23,3 +23,19 @@
   position: absolute;
   left: -10000px;
 }
+
+.button {
+  font-size: var(--font-size-text);
+  border-radius: 3px;
+  padding: 0.25rem 2rem 0.25rem 2rem;
+}
+.button-primary {
+  background-color: var(--colors-bluegreyDark);
+  border: 1px solid var(--colors-bluegreyDark);
+  color: white;
+}
+.button-normal {
+  background-color: white;
+  border: 1px solid var(--colors-bluegreyDark);
+  color: var(--colors-bluegreyDark);
+}

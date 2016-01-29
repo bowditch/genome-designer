@@ -6,6 +6,7 @@ import invariant from 'invariant';
 import NodeText2D from './nodetext2d';
 import RectangleGlyph2D from './glyphs/html/rectangleglyph2d';
 import SBOLGlyph2D from './glyphs/html/sbolglyph2d';
+import ContextDots2D from './glyphs/html/contextdots2d';
 import ConstructBanner from './glyphs/canvas/constructbanner';
 /**
  * shared DIV for measuring text,
@@ -29,6 +30,8 @@ export default class Node2D {
     this.children = [];
     // extend default options with the given options
     this.set(Object.assign({
+      visible: true,
+      hover: false,
       stroke: 'black',
       strokeWidth: 0,
       fill: 'dodgerblue',
@@ -61,6 +64,9 @@ export default class Node2D {
       break;
     case 'sbol':
       this.glyphObject = new SBOLGlyph2D(this);
+      break;
+    case 'dots':
+      this.glyphObject = new ContextDots2D(this);
       break;
     case 'none':
       break;
@@ -291,6 +297,9 @@ export default class Node2D {
     this.el.style.width = this.width + 'px';
     this.el.style.height = this.height + 'px';
     this.el.style.transform = this.localTransform.toCSSString();
+
+    // visibility is controlled with opacity
+    this.el.style.opacity = this.visible ? 1 : 0;
 
     // now update our glyph
     if (this.glyphObject) {

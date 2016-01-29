@@ -1,6 +1,5 @@
+// height of blocks
 const blockH = 30;
-// width of blocks
-const blockW = 70;
 // width of title
 const titleW = 200;
 const titleH = 40;
@@ -12,6 +11,9 @@ const rowBarH = 4;
 const rowBarW = 2;
 // padding around text on blocks
 const textPad = 8;
+// width of context menu 3 dots
+const contextDotsW = 10;
+const contextDotsH = 18;
 // width of condensed text blocks
 const condensedText = 40;
 // height of banner bar above construct name
@@ -37,7 +39,8 @@ export default {
 
   // layout metrics
   blockH: blockH,
-  blockW: blockW,
+  contextDotsW: contextDotsW,
+  contextDotsH: contextDotsH,
   titleW: titleW,
   titleH: titleH,
   rowH: rowH,
