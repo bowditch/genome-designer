@@ -1,0 +1,55 @@
+.InventoryGroupProjects, .InventoryGroupProjects ul, .InventoryGroupProjects li{
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+.InventoryGroupProjects {
+}
+
+.InventoryGroupProjects ul {
+
+}
+
+.InventoryGroupProjects li {
+    line-height: 0%;
+    margin-top: 5px;
+    padding-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+    background:transparent #eee;
+    position:relative;
+    width:100%;
+    list-style: none;
+    float:left;
+    display:inline;
+}
+
+.InventoryGroupProjects li a {
+  margin-left: 25px;
+  color: #888b96;
+  text-decoration: none;
+}
+
+.InventoryGroupProjects li span {
+  float:left;
+  position:absolute;
+  top:15px;
+  left:5px;
+  width:13px;
+  height:13px;
+  cursor:auto;
+  font-size:0;
+}
+
+.InventoryGroupProjects li span.collapsed {
+  background-color:transparent #000;
+  background-image:url('/images/ui/closed_triangle.svg');
+  background-repeat: no-repeat;
+}
+
+.InventoryGroupProjects li span.expanded {
+  background-color:transparent #000;
+  background-image:url('/images/ui/open_triangle.svg');
+  background-repeat: no-repeat;
+}

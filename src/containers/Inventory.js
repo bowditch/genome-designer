@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { inventoryToggleVisibility } from '../actions/inventory';
 import inventorySbol from '../inventory/sbol';
-import InventoryGroup from '../components/Inventory/inventoryGroup';
+import InventoryGroup from '../components/Inventory/InventoryGroup';
 
 import '../styles/Inventory.css';
 import '../styles/SidePanel.css';
