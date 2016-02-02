@@ -9,14 +9,19 @@ export class InventoryGroupProjects extends Component {
   };
 
   //this is a messy function
-  createElementsFromJSON (lst, proj, parent, margin) {
+  createElementsFromJSON (lst, proj, parent, margin, maxDepth) {
+    if (maxDepth) {
+      if (maxDepth < 0) {
+        return;
+      }
+      maxDepth = maxDepth - 1;
+    }
+
     for (let i = 0; i < lst.length; ++i) {
       const id = lst[i];
       const li = document.createElement('li');
-      const newMargin = margin + 20;
-      li.style.cssText = 'margin-left:' + newMargin + 'px; width:100%;';
+      li.style['margin-left'] = margin + 'px';
       const div = document.createElement('div');
-      div.style.cssText = 'position:relative;top:0px;padding-top:10px;margin-left:25px;height:10px';
       const href = document.createElement('a');
       href.setAttribute('href', '#'); //fill
       li.appendChild(div);
@@ -26,40 +31,68 @@ export class InventoryGroupProjects extends Component {
         parent.appendChild(li);
       }
       const components = proj[id].components;
-      if (components) {
+      if (components && components.length > 0) {
         const ul = document.createElement('ul');
         li.appendChild(ul);
-        this.createElementsFromJSON(components, proj, ul, newMargin);
+        this.createElementsFromJSON(components, proj, ul, 20, maxDepth);
+      }
+    }
+  }
+
+  appendArrowHeads(treeView) {
+    const self = this;
+    if (treeView) {
+      this.listItem = function(li) {
+        if (li.getElementsByTagName('ul').length > 0) {
+          const ul = li.getElementsByTagName('ul')[0];
+          ul.style.display = 'none';
+          const span = document.createElement('span');
+          span.className = 'collapsed';
+          span.onclick = function() {
+            const expanded = (ul.style.display === 'block');
+            ul.style.display = expanded ? 'none' : 'block';
+            this.className = expanded ? 'collapsed' : 'expanded';
+          };
+          li.appendChild(span);
+        }
+        const div = li.getElementsByTagName('div')[0];
+        div.style.width = '100%';
+        const a = div.getElementsByTagName('a')[0];
+        a.onclick = function() {
+          if (self.currentSelected) {
+            self.currentSelected.style['background-color'] = '#181b26';
+            const aPrev = self.currentSelected.getElementsByTagName('a')[0];
+            aPrev.style['color'] = '#888b96';
+          }
+          a.style['color'] = '#fff';
+          div.style['background-color'] = '#4385fc';
+          self.currentSelected = div;
+        };
+        div.onclick = function() {
+          if (self.currentSelected) {
+            self.currentSelected.style['background-color'] = '#181b26';
+            const aPrev = self.currentSelected.getElementsByTagName('a')[0];
+            aPrev.style['color'] = '#888b96';
+          }
+          a.style['color'] = '#fff';
+          div.style['background-color'] = '#4385fc';
+          self.currentSelected = div;
+        };
+      };
+      const items = treeView.getElementsByTagName('li');
+      for (let i = 0; i < items.length; i++) {
+        this.listItem(items[i]);
       }
     }
   }
 
   componentDidMount() {
     const treeView = document.getElementById('InventoryGroupProjectsUL');
-
-    const projs = this.getProj();
-    const projNames = Object.keys(projs);
-    this.createElementsFromJSON(projNames, this.flattenProj(projs), treeView, 0);
-
     if (treeView) {
-      const listItem = function listItem(li) {
-        if (li.getElementsByTagName('ul').length > 0) {
-          const ul = li.getElementsByTagName('ul')[0];
-          ul.style.display = 'none';
-          const span = document.createElement('span');
-          span.className = 'collapsed';
-          span.onclick = function onclick() {
-            ul.style.display = (ul.style.display === 'none') ? 'block' : 'none';
-            this.className = (ul.style.display === 'none') ? 'collapsed' : 'expanded';
-          };
-          li.appendChild(span);
-        }
-      };
-
-      const items = treeView.getElementsByTagName('li');
-      for (let i = 0; i < items.length; i++) {
-        listItem(items[i]);
-      }
+      const projs = this.getProj();
+      const projNames = Object.keys(projs);
+      this.createElementsFromJSON(projNames, this.flattenProj(projs), treeView, 0, 1000);
+      this.appendArrowHeads(treeView);
     }
   }
 
