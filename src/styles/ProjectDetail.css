@@ -7,7 +7,7 @@
   min-height: 30px;
   height: 0;
   background-color: var(--colors-bluegreyLight);
-  padding: 8px 10px;
+  padding: 8px 0px;
 
   &.visible {
     background-color: var(--colors-white);
@@ -17,7 +17,7 @@
 
   &-heading {
     display: flex;
-    margin: 0 0 10px;
+    margin: 0 0 0px;
 
     &-close,
     &-toggle {

@@ -12,7 +12,7 @@
     "test": "NODE_ENV=test mocha --recursive --compilers js:babel-core/register,css:test/css-null-compiler.js --require ./test/setup.js",
     "test:watch": "npm test -- --watch",
     "nightwatch": "./node_modules/nightwatch/bin/nightwatch",
-    "postinstall": "./node_modules/selenium-standalone/bin/selenium-standalone install",
+    "postinstall": "node ./node_modules/selenium-standalone/bin/selenium-standalone install",
     "start-docker": "docker build -t genome-designer . && docker run --privileged -v /var/run/docker.sock:/run/docker.sock -i -p 3000:3000 -t genome-designer",
     "create-ecoli-db": "python extensions/foundry/ecoli/generate_db.py jdon extensions/foundry/ecoli/ecoli.genes.json extensions/foundry/ecoli.json"
   },

@@ -87,22 +87,29 @@ class OnionViewer extends React.Component {
         this.updateDimensions();
     }
 
-    updateDimensions(){
+    updateDimensions(setState=true){
         //let width = this.props.container.offsetWidth;
         //let height = this.props.container.offsetHeight;
-        let width = $(".ProjectDetail").width();
-        let height= $(".ProjectDetail").height();
-        height-= $(".ProjectDetail-heading").height();
-		//height-=100;
-        height = Math.max(1,height);
 
+		let frames = document.getElementsByClassName("ProjectDetail");
+		console.log("frames",frames);
+		let rectObject = frames[0].getBoundingClientRect();
+		console.log("rectObject",rectObject);
+		let width = rectObject.width - 20;
+        let height = $(window).height() - rectObject.top - $(".ProjectDetail-heading").height()-8;
+		console.log("rectObject",height);
+        height = Math.max(1,height);
         console.log("new dimensions",width,height);
-        this.setState({width: width,height:height});
+		if(setState)
+        	this.setState({width: width,height:height});
+		else{
+			this.state.width=width;
+			this.state.height=height;
+		}
     }
 
     componentDidMount() {
         window.addEventListener("resize", this.updateDimensions.bind(this));
-        this.updateDimensions();
     }
 
     componentWillUnmount() {
@@ -111,13 +118,17 @@ class OnionViewer extends React.Component {
     }
 
     render() {
-        let {sequence,features,width,height,blocks} = this.state;
+		let {sequence,features,width,height,blocks} = this.state;
+		//let frames = document.getElementsByClassName("ProjectDetail");
+		//let rectObject = frames[0].getBoundingClientRect();
+		//width = rectObject.width - 20;
+		//height= rectObject.height - $(".ProjectDetail-heading").height();
         return (
             <OnionForGenomeDesigner
                 sequence={sequence}
                 features={features}
                 width={width}
-                height={height-50}
+                height={height}
                 blocks={blocks}
             ></OnionForGenomeDesigner>
         )
