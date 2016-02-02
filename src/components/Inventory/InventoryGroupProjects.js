@@ -6,6 +6,7 @@ import '../../styles/InventoryGroupProjects.css';
 export class InventoryGroupProjects extends Component {
   static propTypes = {
     projects: PropTypes.object.isRequired,
+    activeProject: PropTypes.string.isRequired,
   };
 
   //this is a messy function
@@ -57,26 +58,18 @@ export class InventoryGroupProjects extends Component {
         }
         const div = li.getElementsByTagName('div')[0];
         div.style.width = '100%';
-        const a = div.getElementsByTagName('a')[0];
-        a.onclick = function() {
-          if (self.currentSelected) {
-            self.currentSelected.style['background-color'] = '#181b26';
-            const aPrev = self.currentSelected.getElementsByTagName('a')[0];
+        const href = div.getElementsByTagName('a')[0];
+        const isActive = href.childNodes[0].textContent === self.activeProject;
+        href.style.color = isActive? "#abbffe" : "#888b96";
+        href.onclick = div.onclick = function() {
+          if (self.selected) {
+            self.selected.style['background-color'] = '#181b26';
+            const aPrev = self.selected.getElementsByTagName('a')[0];
             aPrev.style['color'] = '#888b96';
           }
-          a.style['color'] = '#fff';
+          href.style.color = '#fff';
           div.style['background-color'] = '#4385fc';
-          self.currentSelected = div;
-        };
-        div.onclick = function() {
-          if (self.currentSelected) {
-            self.currentSelected.style['background-color'] = '#181b26';
-            const aPrev = self.currentSelected.getElementsByTagName('a')[0];
-            aPrev.style['color'] = '#888b96';
-          }
-          a.style['color'] = '#fff';
-          div.style['background-color'] = '#4385fc';
-          self.currentSelected = div;
+          self.selected = div;
         };
       };
       const items = treeView.getElementsByTagName('li');
