@@ -43,4 +43,4 @@ Object.assign(exposed, {
 });
 
 //testing - how do we async trigger this?
-require('./onionExtension.js');
+//require('./onionExtension.js');

@@ -13,6 +13,22 @@ const _getParentFromStore = (blockId, store, def) => {
   return !!id ? store.blocks[id] : def;
 };
 
+const _getChildrenShallow = (blockId, store) => {
+  const block = _getBlockFromStore(blockId, store);
+  return block.components.map(id => _getBlockFromStore(id, store));
+};
+
+const _getAllChildren = (rootId, store, children = []) => {
+  const kids = _getChildrenShallow(rootId, store);
+  if (kids.length) {
+    children.push(...kids);
+    kids.forEach(kid => _getAllChildren(kid.id, store, children));
+  }
+  return children;
+};
+
+const _filterToLeafNodes = (blocks) => blocks.filter(child => !child.components.length);
+
 export const blockGet = (blockId) => {
   return (dispatch, getState) => {
     return _getBlockFromStore(blockId, getState());
@@ -32,16 +48,15 @@ export const blockGetParents = (blockId) => {
   };
 };
 
-export const blockGetChildrenRecursive = (blockId, childId) => {
+export const blockGetChildrenRecursive = (blockId) => {
   return (dispatch, getState) => {
-    //const children = [];
-    const store = getState();
-    const block = _getBlockFromStore(blockId);
+    return _getAllChildren(blockId, getState());
+  };
+};
 
-    const getChildrenShallow = (block) => block.components.map(id => _getBlockFromStore(id, store));
-
-    //todo - recursive
-    return getChildrenShallow(block);
+export const blockGetLeaves = (blockId) => {
+  return (dispatch, getState) => {
+    return _filterToLeafNodes(_getAllChildren(blockId, getState()))
   };
 };
 
@@ -56,5 +71,21 @@ export const blockGetIndex = (blockId) => {
   return (dispatch, getState) => {
     const parent = _getParentFromStore(blockId, getState(), {});
     return Array.isArray(parent.components) ? parent.components.indexOf(blockId) : -1;
+  };
+};
+
+const _checkSingleBlockIsSpec = (block) => {
+  return (!block.options.length) && (block.sequence.length > 0);
+};
+
+export const blockIsSpec = (blockId) => {
+  return (dispatch, getState) => {
+    const store = getState();
+    const block = _getBlockFromStore(blockId, store);
+    if (block.components.length) {
+      return _filterToLeafNodes(_getAllChildren(blockId, store))
+        .every(_checkSingleBlockIsSpec);
+    }
+    return _checkSingleBlockIsSpec(block);
   };
 };

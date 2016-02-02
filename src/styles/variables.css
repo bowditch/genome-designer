@@ -5,8 +5,6 @@
 
   --colors-white: #ffffff;
   --colors-greyDark: #666666;
-  --colors-grey-duncan: #cccccc;
-  --colors-greyLight-duncan: rgb(55,57,77);
   --colors-grey: #808080;
   --colors-greyMedLight: #999999;
   --colors-greyLight: #e6e6e6;
@@ -53,4 +51,10 @@
   ==================== */
 
   --timing-fast: 0.15s;
+
+  /* Z Order
+  =================== */
+  --zMenu: 100000;
+  --zMenuContainer: 1000;
+  --zModal:90000;
 }

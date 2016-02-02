@@ -99,6 +99,7 @@ export default class Block extends Instance {
         });
   }
 
+  //todo - should have method for setting sequence length
   /**
    * @description Set the sequence URL of the block. Does not affect annotations.
    * ONLY SET THE URL ONCE THE FILE IS WRITTEN SUCCESSFULLY

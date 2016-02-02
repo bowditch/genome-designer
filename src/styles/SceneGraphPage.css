@@ -134,3 +134,16 @@
 .construct-viewer-menu:hover {
   opacity: 1;
 }
+/*block dot context menu items*/
+.dot-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
+  background-color: black;
+}

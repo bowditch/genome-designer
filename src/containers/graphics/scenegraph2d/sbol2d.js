@@ -31,7 +31,7 @@ export default class SBOL2D extends Node2D {
       return new Vector2D(kT.condensedText, kT.blockH);
     }
     // measure actual text plus some padding
-    return this.measureText(str).add(new Vector2D(kT.textPad * 3 + kT.sbolIcon, 0));
+    return this.measureText(str).add(new Vector2D(kT.textPad * 3 + kT.sbolIcon + kT.contextDotsW, 0));
   }
 
   update() {

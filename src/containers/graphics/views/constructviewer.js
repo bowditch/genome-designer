@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import SceneGraph2D from '../scenegraph2d/scenegraph2d';
 import Vector2D from '../geometry/vector2d';
 import Layout from './layout.js';
+import PopupMenu from '../../../components/Menu/PopupMenu';
+import ModalWindow from '../../../components/modal/modalwindow';
 import {connect } from 'react-redux';
 import {
   blockCreate,
@@ -42,10 +44,16 @@ export class ConstructViewer extends Component {
     blockAddComponent: PropTypes.func,
     blockRemoveComponent: PropTypes.func,
     blocks: PropTypes.object,
+    ui: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
+    this.state = {
+      blockPopupMenuOpen: false,    // context menu for blocks
+      menuPosition: new Vector2D(), // position for any popup menu,
+      modalOpen: false,             // controls visibility of test modal window
+    };
   }
 
   /**
@@ -78,6 +86,13 @@ export class ConstructViewer extends Component {
     this.update();
     // handle window resize to reflow the layout
     window.addEventListener('resize', debounce(this.windowResized.bind(this), 15));
+  }
+
+  /**
+   * update scene graph after the react component updates
+   */
+  componentDidUpdate() {
+    this.update();
   }
 
   /**
@@ -218,16 +233,101 @@ export class ConstructViewer extends Component {
   }
 
   /**
+   * close all popup menus
+   */
+  closePopups() {
+    this.setState({blockPopupMenuOpen: false});
+  }
+  /**
+   * open any popup menu by apply the appropriate state and global position
+   */
+  openPopup(state) {
+    this.setState(state);
+  }
+  /**
+   * return JSX for block construct menu
+   */
+  blockContextMenu() {
+    return (<PopupMenu
+      open={this.state.blockPopupMenuOpen}
+      position={this.state.menuPosition}
+      closePopup={this.closePopups.bind(this)}
+      menuItems={
+        [
+          {
+            text: 'Inspect',
+          },
+          {},
+          {
+            text: 'Symbol',
+          },
+          {
+            text: 'Color',
+          },
+          {
+            text: 'Reverse',
+          },
+          {},
+          {
+            text: 'Add to my Inventory',
+          },
+          {
+            text: 'Export as PDF', //
+          },
+          {},
+          {
+            text: 'Rename',
+          },
+          {
+            text: 'Duplicate',
+          },
+          {
+            text: 'Delete',
+          },
+          {},
+          {
+            text: 'Open Modal Window',
+            action: () => {
+              this.setState({
+                modalOpen: true,
+              });
+            },
+          },
+        ]
+      }/>);
+  }
+  /**
    * render the component, the scene graph will render later when componentDidUpdate is called
    */
   render() {
 
+    // TODO, can be conditional when master is fixed and this is merged with construct select PR
+    //const menu = this.props.constructId === this.props.ui.currentConstructId
+    const menu = <ConstructViewerMenu constructId={this.props.constructId} layoutAlgorithm={this.props.layoutAlgorithm}/>;
+
     const rendered = (
       <div className="construct-viewer" key={this.props.construct.id}>
-        <ConstructViewerMenu constructId={this.props.constructId} layoutAlgorithm={this.props.layoutAlgorithm}/>
+        {menu}
         <div className="sceneGraphContainer">
           <div className="sceneGraph"/>
         </div>
+        {this.blockContextMenu()}
+        <ModalWindow
+          open={this.state.modalOpen}
+          title="Construct Viewer Modal"
+          payload={<div className="payload"/>}
+          closeOnClickOutside
+          buttons={
+            [
+              {text: 'Ok', primary: true},
+              {text: 'Cancel', primary: false},
+            ]}
+          closeModal={(buttonText) => {
+            this.setState({
+              modalOpen: false,
+            });
+          }}
+          />
       </div>
     );
     return rendered;

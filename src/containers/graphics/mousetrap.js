@@ -25,25 +25,41 @@ export default class MouseTrap {
     // Options are:
     //
     // element: HTMLElement - the element which we listen to
+    // mouseEnter: Function - callback for mouseenter event (event)
+    // mouseLeave: Function - callback for mouseleave event (event)
     // mouseDown: Function - callback for mousedown event (point, event)
     // mouseMove: Function - callback for mousemove event (point, event)
-    // mouseDrag: Function - callback for mousemove with button help down event (point, event)
-    // mouseUp: Function - callback for mouseup event (point, event)
+    // mouseDrag: Function - callback for mousemove with button held down event (point, event)
+    // mouseUp: Function - callback for mouseup event (point, event) only when mousedown preceeded.
     this.options = Object.assign({}, options);
     invariant(this.options.element, 'options must contain an element');
     this.element = options.element;
 
     // create bound versions of the listener which we can remove as well as add
+    this.mouseEnter = this.onMouseEnter.bind(this);
+    this.mouseLeave = this.onMouseLeave.bind(this);
     this.mouseDown = this.onMouseDown.bind(this);
     this.mouseMove = this.onMouseMove.bind(this);
     this.mouseDrag = this.onMouseDrag.bind(this);
     this.mouseUp = this.onMouseUp.bind(this);
+    // mouse enter/leave are always running
+    this.element.addEventListener('mouseenter', this.mouseEnter);
+    this.element.addEventListener('mouseleave', this.mouseLeave);
     // sink the mousedown, later dynamically add the move/up handlers
     this.element.addEventListener('mousedown', this.mouseDown);
     // for normal mouse move with no button we track via the target element itself
     this.element.addEventListener('mousemove', this.mouseMove);
   }
 
+  /**
+   * mouse enter/leave handlers
+   */
+  onMouseEnter(event) {
+    this.callback('mouseEnter', event);
+  }
+  onMouseLeave(event) {
+    this.callback('mouseLeave', event);
+  }
   /**
    * mouse down handler, invoked on our target element
    */
@@ -128,6 +144,8 @@ export default class MouseTrap {
    * cleanup all event listeners. Instance cannot be used after this.
    */
   dispose() {
+    this.element.removeEventListener('mouseenter', this.mouseEnter);
+    this.element.removeEventListener('mouseleave', this.mouseLeave);
     this.element.removeEventListener('mousedown', this.mouseDown);
     this.element.removeEventListener('mousemove', this.mouseMove);
     this.cancelDrag();

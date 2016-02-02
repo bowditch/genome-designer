@@ -36,11 +36,13 @@ export default class SBOLGlyph2D extends Glyph2D {
     this.el.style.backgroundColor = this.node.fill;
     this.el.style.border = sw ? `${sw}px solid ${this.node.stroke}` : 'none';
     // the icon img tag
-    this.img.style.left = (this.node.width - kT.sbolIcon - 2) + 'px';
+    this.img.style.left = (this.node.width - kT.sbolIcon - 2 - kT.contextDotsW) + 'px';
     this.img.style.maxWidth = kT.sbolIcon + 'px';
     this.img.style.top = (this.node.height / 2 - kT.sbolIcon / 2) + 'px';
 
     const svgPath = symbols.find(symbol => symbol.id === this.node.sbolName).metadata.imageThick;
-    this.img.setAttribute('src', svgPath);
+    if (this.img.getAttribute('src') !== svgPath) {
+      this.img.setAttribute('src', svgPath);
+    }
   }
 }
